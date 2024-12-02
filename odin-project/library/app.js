@@ -18,7 +18,7 @@ closeBtn.addEventListener("click", () => {
   modal.removeAttribute("open", "");
 });
 
-function Book(title, author, pages) {
+function Book(title, author, pages, isRead) {
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -43,9 +43,27 @@ modal.addEventListener("submit", (e) => {
 
 function displayBooks() {
   books.innerHTML = "";
-  books_store.forEach((item) => {
+  books_store.forEach((book, index) => {
     const li = document.createElement("li");
-    li.textContent = `Title: ${item.title}, Author:${item.author}, Pages:${item.pages}`;
+    li.setAttribute("data-index", index);
+    li.innerHTML = ` <h3>${book.title}</h3>
+    <p>Author: ${book.author}</p>
+    <p>Pages: ${book.pages}</p> <button id="removeBtn">remove</button>  <button id="updateReadStatus">Read</button>`;
     books.append(li);
   });
 }
+
+books.addEventListener("click", (e) => {
+  const event = e.target;
+  const id = event.id;
+  if (id === "removeBtn") {
+    const parentElement = event.parentElement;
+    const attr = parentElement.getAttribute("data-index");
+    books_store.splice(attr, 1);
+  }
+  if (id === "updateReadStatus") {
+    console.log("update");
+  }
+
+  displayBooks();
+});
